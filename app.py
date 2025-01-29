@@ -10,56 +10,80 @@ class RectangleDrawerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Contouring Rectangles")
+
+        # UI
+        self.root.grid_columnconfigure(0, weight=1)
+        self.root.grid_columnconfigure(1, weight=1)
+        self.root.grid_columnconfigure(2, weight=3) 
+        self.root.grid_rowconfigure(0, weight=3)
+        self.root.grid_rowconfigure(1, weight=1)
+        self.root.grid_rowconfigure(2, weight=1)
+        self.root.grid_rowconfigure(3, weight=1)
+        self.root.grid_rowconfigure(4, weight=1)
+        self.root.grid_rowconfigure(5, weight=1)
+        self.root.grid_rowconfigure(6, weight=1)
+        self.root.grid_rowconfigure(7, weight=1)
+        self.root.grid_rowconfigure(8, weight=3)
         
+        # Custom button
         buttonStyle = ttk.Style()
         buttonStyle.configure(
             "Custom.TButton", 
-            font=("Arial", 22),
-            padding=(10, 10)
+            font=("Arial", 16),
+            padding=(8, 8)
         )
 
-        # Create input fields for the two points
         self.create_input_fields()
 
-        # Create a Matplotlib figure and embed it in Tkinter
-        self.fig, self.ax = plt.subplots()
+        # Create and enbed graph
+        self.fig, self.ax = plt.subplots(figsize=(8, 6))
         self.ax.set_aspect('equal')
         self.ax.set_title("Graph")
         self.ax.set_xlim(0, 10)
         self.ax.set_ylim(0, 10)
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.root)
         self.canvas_widget = self.canvas.get_tk_widget()
-        self.canvas_widget.grid(row=0, column=2, rowspan=12, padx=30, pady=30)
+        self.canvas_widget.grid(row=1, column=2, rowspan=12, padx=30, pady=30)
+
+        self.rectangles = []
+        self.rect_visible = True
 
     def create_input_fields(self):
-        # Input labels and entry fields - point 1
-        ttk.Label(self.root, text="Point 1", font=("Arial", 28)).grid(row=0, column=0, sticky="e")
-        
-        ttk.Label(self.root, text="X: ", font=("Arial", 23)).grid(row=1, column=0, sticky="e")
-        self.x1_entry = ttk.Entry(self.root, width=12, font=("Arial", 23))
-        self.x1_entry.grid(row=1, column=1, sticky="w", padx=20, pady=10)
-        
-        ttk.Label(self.root, text="Y: ", font=("Arial", 23)).grid(row=2, column=0, sticky="e")
-        self.y1_entry = ttk.Entry(self.root, width=12, font=("Arial", 23))
-        self.y1_entry.grid(row=2, column=1, sticky="w", padx=20, pady=10)
+        # Create the left pannel for GUI
 
-        # Input labels and entry fields - point 2 
-        ttk.Label(self.root, text="Point 2", font=("Arial", 28)).grid(row=3, column=0, sticky="e")
+        # Point 1
+        ttk.Label(self.root, text="Point 1", font=("Arial", 23)).grid(row=1, column=0, sticky="e")
         
-        ttk.Label(self.root, text="X: ", font=("Arial", 23)).grid(row=4, column=0, sticky="e")
-        self.x2_entry = ttk.Entry(self.root, width=12, font=("Arial", 23))
-        self.x2_entry.grid(row=4, column=1, sticky="w", padx=20, pady=10)
+        ttk.Label(self.root, text="X: ", font=("Arial", 18)).grid(row=2, column=0, sticky="e")
+        self.x1_entry = ttk.Entry(self.root, width=12, font=("Arial", 18))
+        self.x1_entry.grid(row=2, column=1, sticky="w", padx=20, pady=10)
         
-        ttk.Label(self.root, text="Y: ", font=("Arial", 23)).grid(row=5, column=0, sticky="e")
-        self.y2_entry = ttk.Entry(self.root, width=12, font=("Arial", 23))
-        self.y2_entry.grid(row=5, column=1, sticky="w", padx=20, pady=10)
+        ttk.Label(self.root, text="Y: ", font=("Arial", 18)).grid(row=3, column=0, sticky="e")
+        self.y1_entry = ttk.Entry(self.root, width=12, font=("Arial", 18))
+        self.y1_entry.grid(row=3, column=1, sticky="w", padx=20, pady=10)
 
-        # Button to add the rectangle
-        self.add_button = ttk.Button(self.root, text="Add Rectangle",command=self.add_rectangle, style="Custom.TButton")
-        self.add_button.grid(row=6, column=1, padx=20, pady=10)
+        # Point 2 
+        ttk.Label(self.root, text="Point 2", font=("Arial", 23)).grid(row=4, column=0, sticky="e")
+        
+        ttk.Label(self.root, text="X: ", font=("Arial", 18)).grid(row=5, column=0, sticky="e")
+        self.x2_entry = ttk.Entry(self.root, width=12, font=("Arial", 18))
+        self.x2_entry.grid(row=5, column=1, sticky="w", padx=20, pady=10)
+        
+        ttk.Label(self.root, text="Y: ", font=("Arial", 18)).grid(row=6, column=0, sticky="e")
+        self.y2_entry = ttk.Entry(self.root, width=12, font=("Arial", 18))
+        self.y2_entry.grid(row=6, column=1, sticky="w", padx=20, pady=10)
+
+        # "Add rectangle" button
+        self.add_button = ttk.Button(self.root, text="Add",command=self.add_rectangle, style="Custom.TButton")
+        self.add_button.grid(row=7, column=1, padx=20, pady=10, sticky="w")
+
+        # "Hide rectangles" button
+        self.toggle_button = ttk.Button(self.root, text="Hide", command=self.toggle_rectangles, style="Custom.TButton")
+        self.toggle_button.grid(row=8, column=1, padx=20, pady=10, sticky="w")
+
 
     def add_rectangle(self):
-        # Get the input values
+        """Adds a rectangle from user input to the plot and stores it to memory.\n - input: any 2 points (can have any slope);\n - output: corresponding rectangle (edges parallel to the xOy axis).\n - adds to memory and to embedded graph."""
         try:
             x1 = float(self.x1_entry.get())
             y1 = float(self.y1_entry.get())
@@ -69,11 +93,25 @@ class RectangleDrawerApp:
             print("Invalid input. Please enter numeric values for the coordinates.")
             return
 
-        # Create a Rectangle object
+        # Create a rectangle
         rectangle = Rectangle(x1, y1, x2, y2)
+        patch = add_rectangle_to_plot(self.ax, rectangle)
 
-        # Add the rectangle to the plot
-        add_rectangle_to_plot(self.ax, rectangle)
+        # Store rectangles
+        if patch:
+            self.rectangles.append(patch)
 
-        # Refresh the canvas
+        # Refresh
         self.canvas.draw()
+    
+    def toggle_rectangles(self):
+        """Toggles the visibility of all the rectangles."""
+        self.rect_visible = not self.rect_visible  # Toggle state
+
+        for rect in self.rectangles:
+            rect.set_visible(self.rect_visible)
+        
+        self.toggle_button.config(text="Unhide" if not self.rect_visible else "Hide")
+
+        self.canvas.draw()
+
