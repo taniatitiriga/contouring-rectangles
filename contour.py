@@ -57,10 +57,10 @@ class SegmentTree:
             else:
                 self.stack.append(node.B)
             self.stack.append(node.E)
-        # else:
-        #     if node.status == "partial":
-        #         self.compl(node.left)
-        #         self.compl(node.right)
+        else:
+            if node.status == "partial":
+                self.compl(node.left)
+                self.compl(node.right)
 
     def insert(self, b, e, node):
         if node == None:
@@ -178,8 +178,19 @@ def process_events(events, y_list):
         vertical_edges.extend([(current_x, st.stack[i], st.stack[i+1]) for i in range(0, len(st.stack), 2)])
         # db.extend(st.stack)
     
+    vertical_edges.sort(key=lambda e: (e[0], e[1]))
+    ve = [vertical_edges[0]]
+    for i in range(1, len(vertical_edges)):
+        if ve[-1][0] == vertical_edges[i][0]:
+            if (vertical_edges[i][1] <= ve[-1][1]) and (ve[-1][2] <= vertical_edges[i][2]):
+                ve.pop()
+            elif (vertical_edges[i][1] >= ve[-1][1]) and (ve[-1][2] >= vertical_edges[i][2]):
+                continue
+        ve.append(vertical_edges[i])
+
     # print(db)
-    return vertical_edges
+    return ve
+    # return vertical_edges
 
 def build_contour(vertical_edges, y_list):
     v_edges = []
@@ -204,7 +215,9 @@ def find_contour(rectangles):
     rectangles = change_coordinates(rectangles)
     norm_rects, y_list = normalize_coordinates(rectangles)
     events = create_events(norm_rects)
+    print(events)
     vertical_edges = process_events(events, y_list)
+    print(vertical_edges)
     contour = build_contour(vertical_edges, y_list)
     return contour
 
@@ -213,6 +226,23 @@ def find_contour(rectangles):
 #     (5, 5, 7, 1),
 #     (8, 5, 11, 3),
 #     (1, 3, 3, 1)
+# ]
+
+# rectangles = [
+#     (4, 4, 8, 0),
+#     (1, 8, 8, 2)
+# ]
+
+# rectangles = [
+#     (4, 4, 8, 0),
+#     (1, 8, 8, 2),
+#     (6, 6, 9, 9)
+# ]
+
+# rectangles = [
+#     (2, 1, 8, 2.5),
+#     (1, 2, 3, 9),
+#     (1, 5, 7, 7)
 # ]
 
 # print(find_contour(rectangles))
