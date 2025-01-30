@@ -21,4 +21,4 @@ def add_contour_to_plot(ax, contour):
 
     for c in contour:
         line = c
-        ax.plot(*zip(*line))
+        ax.plot(*zip(*line), color="red")

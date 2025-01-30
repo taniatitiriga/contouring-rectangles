@@ -109,7 +109,6 @@ class RectangleDrawerApp:
         contour = find_contour(self.rectangles)
         add_contour_to_plot(self.ax, contour)
 
-
         # Refresh
         self.canvas.draw()
     
