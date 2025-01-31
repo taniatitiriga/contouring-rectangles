@@ -39,6 +39,7 @@ class RectangleDrawerApp:
 
         # Create and enbed graph
         self.fig, self.ax = plt.subplots(figsize=(8, 6))
+        self.ax.grid(visible=True, linestyle="--", linewidth=1)
         self.ax.set_aspect('equal')
         self.ax.set_title("Graph")
         self.ax.set_xlim(0, 10)
@@ -84,6 +85,10 @@ class RectangleDrawerApp:
         # "Hide rectangles" button
         self.toggle_button = ttk.Button(self.root, text="Hide", command=self.toggle_rectangles, style="Custom.TButton")
         self.toggle_button.grid(row=8, column=1, padx=20, pady=10, sticky="w")
+        
+        # "Clear" button
+        self.clear_button = ttk.Button(self.root, text="Clear", command=self.clear_rectangles, style="Custom.TButton")
+        self.clear_button.grid(row=8, column=0, padx=20, pady=10, sticky="w")
 
 
     def add_rectangle(self):
@@ -121,5 +126,21 @@ class RectangleDrawerApp:
         
         self.toggle_button.config(text="Unhide" if not self.rect_visible else "Hide")
 
+        self.canvas.draw()
+        
+    def clear_rectangles(self):
+        """Clear the graph."""
+        # Clear the variables
+        for patch in self.ax.patches:
+            patch.remove()
+        
+        for line in self.ax.get_lines():
+            line.remove()
+        
+        self.patches = []
+        self.contour = []
+        self.rectangles = []
+        self.rect_visible = True
+        # Refresh
         self.canvas.draw()
 
