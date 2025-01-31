@@ -189,6 +189,7 @@ def process_events(events, y_list):
         ve.append(vertical_edges[i])
 
     # print(db)
+    print(vertical_edges)
     return ve
     # return vertical_edges
 
