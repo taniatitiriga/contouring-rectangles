@@ -182,7 +182,21 @@ def process_events(events, y_list):
     ve = [vertical_edges[0]]
     for i in range(1, len(vertical_edges)):
         if ve[-1][0] == vertical_edges[i][0]:
-            if (vertical_edges[i][1] <= ve[-1][1]) and (ve[-1][2] <= vertical_edges[i][2]):
+            if ve[-1] == vertical_edges[i]:
+                continue
+            if ve[-1][1] <= vertical_edges[i][1] and ve[-1][2] >= vertical_edges[i][1] and vertical_edges[i][2] >= ve[-1][2]:
+                x = ve[-1][0]
+                y1 = ve[-1][1]
+                ve.pop()
+                ve.append((x, y1, vertical_edges[i][2]))
+                continue
+            elif vertical_edges[i][1] <= ve[-1][1] and vertical_edges[i][2] >= ve[-1][1] and ve[-1][2] >= vertical_edges[i][2]:
+                x = ve[-1][0]
+                y2 = ve[-1][2]
+                ve.pop()
+                ve.append((x, vertical_edges[i][1], y2))
+                continue
+            elif (vertical_edges[i][1] <= ve[-1][1]) and (ve[-1][2] <= vertical_edges[i][2]):
                 ve.pop()
             elif (vertical_edges[i][1] >= ve[-1][1]) and (ve[-1][2] >= vertical_edges[i][2]):
                 continue
