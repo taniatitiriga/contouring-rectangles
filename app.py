@@ -7,6 +7,7 @@ from rectangle import Rectangle
 from drawer import add_rectangle_to_plot
 from drawer import add_contour_to_plot
 from contour import find_contour
+from rectangle_generator import random_rectangle
 
 class RectangleDrawerApp:
     def __init__(self, root):
@@ -149,5 +150,17 @@ class RectangleDrawerApp:
     
     def random_rectangle(self):
         """Insert a random rectangle."""
-        point_set=[]
-        
+        x1, y1, x2, y2 = random_rectangle()
+        rectangle = Rectangle(x1, y1, x2, y2)
+        patch = add_rectangle_to_plot(self.ax, rectangle)
+        self.rectangles.append((x1, y1, x2, y2))
+
+        # Store rectangles
+        if patch:
+            self.patches.append(patch)
+
+        contour = find_contour(self.rectangles)
+        add_contour_to_plot(self.ax, contour)
+
+        # Refresh
+        self.canvas.draw()
