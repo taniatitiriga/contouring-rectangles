@@ -1,2 +1,5 @@
 /__pycache__
 *.pyc
+__pycache__/app.cpython-312.pyc
+__pycache__/drawer.cpython-312.pyc
+__pycache__/rectangle.cpython-312.pyc

@@ -82,14 +82,17 @@ class RectangleDrawerApp:
         self.add_button = ttk.Button(self.root, text="Add",command=self.add_rectangle, style="Custom.TButton")
         self.add_button.grid(row=7, column=1, padx=20, pady=10, sticky="w")
 
+        # "Add random" button
+        self.random_button = ttk.Button(self.root, text="Random", command=self.random_rectangle, style="Custom.TButton")
+        self.random_button.grid(row=7, column=0, padx=20, pady=10, sticky="e")
+
         # "Hide rectangles" button
         self.toggle_button = ttk.Button(self.root, text="Hide", command=self.toggle_rectangles, style="Custom.TButton")
         self.toggle_button.grid(row=8, column=1, padx=20, pady=10, sticky="w")
         
         # "Clear" button
         self.clear_button = ttk.Button(self.root, text="Clear", command=self.clear_rectangles, style="Custom.TButton")
-        self.clear_button.grid(row=8, column=0, padx=20, pady=10, sticky="w")
-
+        self.clear_button.grid(row=8, column=0, padx=20, pady=10, sticky="e")
 
     def add_rectangle(self):
         """Adds a rectangle from user input to the plot and stores it to memory.\n - input: any 2 points (can have any slope);\n - output: corresponding rectangle (edges parallel to the xOy axis).\n - adds to memory and to embedded graph."""
@@ -143,4 +146,8 @@ class RectangleDrawerApp:
         self.rect_visible = True
         # Refresh
         self.canvas.draw()
-
+    
+    def random_rectangle(self):
+        """Insert a random rectangle."""
+        point_set=[]
+        
