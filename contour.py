@@ -202,10 +202,8 @@ def process_events(events, y_list):
                 continue
         ve.append(vertical_edges[i])
 
-    # print(db)
     print(vertical_edges)
     return ve
-    # return vertical_edges
 
 def build_contour(vertical_edges, y_list):
     v_edges = []
@@ -235,50 +233,3 @@ def find_contour(rectangles):
     print(vertical_edges)
     contour = build_contour(vertical_edges, y_list)
     return contour
-
-# rectangles = [
-#     (3, 6, 9, 3),
-#     (5, 5, 7, 1),
-#     (8, 5, 11, 3),
-#     (1, 3, 3, 1)
-# ]
-
-# rectangles = [
-#     (4, 4, 8, 0),
-#     (1, 8, 8, 2)
-# ]
-
-# rectangles = [
-#     (4, 4, 8, 0),
-#     (1, 8, 8, 2),
-#     (6, 6, 9, 9)
-# ]
-
-# rectangles = [
-#     (2, 1, 8, 2.5),
-#     (1, 2, 3, 9),
-#     (1, 5, 7, 7)
-# ]
-
-# print(find_contour(rectangles))
-
-# rectangles = change_coordinates(rectangles)
-# print(rectangles)
-# normal_coordinates, y_list = normalize_coordinates(rectangles)
-# print(normal_coordinates, y_list)
-# events = create_events(normal_coordinates)
-# print(events)
-# vertical = process_events(events, y_list)
-# print(vertical)
-# print(build_contour(vertical, y_list))
-
-# st = SegmentTree(len(y_list))
-# st.insert(events[0][2], events[0][3], st.root)
-
-# st = process_events(events, y_list)
-
-# print(st.root)
-# print(st.root.left)
-# print(st.root.right)
-# print(st.root.right.right)
-# print(st.stack)
