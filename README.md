@@ -61,10 +61,15 @@ python main.py
 ```
 ### Interacting with the interface
 
-The interface is straight-forward and easy to use. Input any 2 points with floating point coordinates $\in [0, 10]$. Then, hit the Add button. This will display a new rectangle (blue) and the contour (red). If you want to see the contour better, click Hide.
-Continue adding rectangles and see how the contour gets dynamically re-computed.
+The interface is straight-forward and easy to use. Input any 2 points with floating point coordinates $\in [0, 10]$. Then, hit the Add button. This will display a new rectangle (blue) and the contour (red). Alternatively, you can use the "Random" function to generate a random rectangle.
+The contour is re-computed from scratch for the entire set of rectangles after any addition.
 
-![interface](https://github.com/user-attachments/assets/08fdede1-c1af-4065-bb97-b0248624dc8c)
+![image](https://github.com/user-attachments/assets/dbc7f370-d069-4939-bd04-d69f75177ebe)
+
+For a better view of the generated contour, select the "Hide" option.
+
+![image](https://github.com/user-attachments/assets/da3b45d8-b51d-477c-a251-bf779d5c0d4c)
+
 
 ## Credits
 A project by [Tania Titirigă](https://www.linkedin.com/in/tania-titiriga/) and [Mark Dragotă](https://www.linkedin.com/in/markdragota/). 
